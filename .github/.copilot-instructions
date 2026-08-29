@@ -1,0 +1,48 @@
+# WhatsApp Notifier - Copilot Instructions
+
+## Project Overview
+
+This is a Go service for sending WhatsApp notifications. It currently provides
+the API foundation from `go-api-template`; the WhatsApp provider has not been
+selected or integrated yet.
+
+**Module**: `whatsapp-notifier`
+
+## Project Structure
+
+```text
+cmd/main.go       Application entry point
+app/              Dependency wiring and route registration
+config/           Configuration loading and validation
+http/             HTTP handlers and middleware
+http_server/      HTTP server implementation
+model/            API models
+o11/              OpenTelemetry setup
+repository/       Persistence layer
+services/         Business services
+```
+
+## Development Guidelines
+
+- Follow idiomatic Go naming, error handling, and package organization.
+- Format changes with `gofmt` and validate them with `go vet ./...` and
+  `go test ./...`.
+- Keep credentials and API tokens out of source control.
+- Keep provider-specific WhatsApp behavior behind a small interface.
+- Keep HTTP handlers focused on validation and response mapping; place
+  notification logic in services.
+- Add tests for new handlers, services, and configuration validation.
+
+## Current Capabilities
+
+- HTTP server with graceful shutdown
+- JWT authentication
+- Health, version, metrics, and Swagger endpoints
+- Structured logging and OpenTelemetry support
+
+## Next Steps
+
+- Select Meta WhatsApp Cloud API or a WhatsApp Web client.
+- Add provider configuration and credentials.
+- Implement an authenticated notification endpoint.
+- Handle delivery status, persistence, and retry behavior.
