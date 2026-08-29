@@ -48,6 +48,7 @@ func LoadConfig() (*Config, *ConfigError) {
 	var serverTimeout int
 	var serverReadTimeout int
 	var serverWriteTimeout int
+	var swaggerHost string
 
 	// Define command-line flags for LOG configuration
 	var logLevel string
@@ -66,6 +67,7 @@ func LoadConfig() (*Config, *ConfigError) {
 	flag.IntVar(&serverTimeout, "http-timeout", 30, "HTTP server timeout in seconds")
 	flag.IntVar(&serverReadTimeout, "http-read-timeout", 10, "HTTP server read timeout in seconds")
 	flag.IntVar(&serverWriteTimeout, "http-write-timeout", 10, "HTTP server write timeout in seconds")
+	flag.StringVar(&swaggerHost, "swagger-host", "", "Swagger UI host (default: auto-detect)")
 
 	// Flags log
 	flag.StringVar(&logLevel, "log-level", "info", "Log level (debug, info, warn, error)")
@@ -85,6 +87,7 @@ func LoadConfig() (*Config, *ConfigError) {
 	config.HttpServer.Timeout = serverTimeout
 	config.HttpServer.ReadTimeout = serverReadTimeout
 	config.HttpServer.WriteTimeout = serverWriteTimeout
+	config.HttpServer.SwaggerHost = swaggerHost
 
 	if err := config.HttpServer.validate(); err != nil {
 		listErrors = append(listErrors, err)

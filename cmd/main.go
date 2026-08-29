@@ -98,7 +98,12 @@ func main() {
 	docs.SwaggerInfo.Title = "WhatsApp Notifier API"
 	docs.SwaggerInfo.Description = "API for sending WhatsApp notifications"
 	docs.SwaggerInfo.Version = "1.0"
-	docs.SwaggerInfo.Host = fmt.Sprintf("%s:%d", httpConf.Addr, httpConf.Port)
+	switch {
+	case cfg.HttpServer.SwaggerHost != "":
+		docs.SwaggerInfo.Host = cfg.HttpServer.SwaggerHost
+	case httpConf.Addr != "" && httpConf.Addr != "0.0.0.0":
+		docs.SwaggerInfo.Host = fmt.Sprintf("%s:%d", httpConf.Addr, httpConf.Port)
+	}
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 

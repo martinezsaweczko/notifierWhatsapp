@@ -8,6 +8,7 @@ type ServerConfig struct {
 	Timeout      int
 	ReadTimeout  int
 	WriteTimeout int
+	SwaggerHost  string
 }
 
 func (s *ServerConfig) validate() error {
