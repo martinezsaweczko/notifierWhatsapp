@@ -11,8 +11,13 @@ LDFLAGS := -X main.version=$(VERSION) -X main.buildTime=$(BUILD_TIME) -X main.ap
 SWAG := go run github.com/swaggo/swag/cmd/swag@v1.16.6
 VULNCHECK := go run golang.org/x/vuln/cmd/govulncheck@latest
 
+# Container engine can be overridden to use docker or podman.
+CONTAINER_ENGINE := podman
+IMAGE_NAME := notifierwhatsapp
+IMAGE_TAG := latest
 
-.PHONY: build check clean keys clean-keys
+
+.PHONY: build check clean keys clean-keys container-build container-run
 
 keys: clean-keys
 	@mkdir -p keys
@@ -49,3 +54,19 @@ vulncheck:
 
 swagger:
 	mkdir -p docs && $(SWAG) init -g cmd/main.go -o docs
+
+container-build: build
+	$(CONTAINER_ENGINE) build \
+		--build-arg VERSION=$(VERSION) \
+		--build-arg BUILD_TIME=$(BUILD_TIME) \
+		--build-arg APP_NAME=$(APP_NAME) \
+		-t $(IMAGE_NAME):$(IMAGE_TAG) .
+
+container-run:
+	$(CONTAINER_ENGINE) run --rm \
+		-p 8080:8080 \
+		-v notifierwhatsapp-session:/data \
+		$(IMAGE_NAME):$(IMAGE_TAG) \
+		-http-address=0.0.0.0 \
+		-whatsapp-session-db=/data/whatsapp.db \
+		-o11-prometheus-path=/metrics

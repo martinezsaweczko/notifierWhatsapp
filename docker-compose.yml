@@ -1,0 +1,15 @@
+services:
+  notifier:
+    image: ghcr.io/martinezsaweczko/notifierwhatsapp:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - whatsapp-session:/data
+    command:
+      - /app/notifierwhatsapp
+      - -http-address=0.0.0.0
+      - -whatsapp-session-db=/data/whatsapp.db
+      - -o11-prometheus-path=/metrics
+
+volumes:
+  whatsapp-session:

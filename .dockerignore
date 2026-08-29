@@ -1,0 +1,12 @@
+.git
+.github
+.vscode
+build
+keys
+*.db
+*.test
+*.out
+coverage.*
+*.coverprofile
+profile.cov
+
