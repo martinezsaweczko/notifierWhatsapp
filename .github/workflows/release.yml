@@ -46,9 +46,19 @@ jobs:
             -ldflags "-X main.version=${{ steps.tag.outputs.version }} -X main.buildTime=$(date -u +"%Y-%m-%dT%H:%M:%SZ") -X main.appName=whatsapp-notifier" \
             -o build/whatsapp-notifier-windows-amd64.exe cmd/main.go
 
+      - name: Verify release artifacts
+        run: |
+          for artifact in build/whatsapp-notifier-linux-amd64 build/whatsapp-notifier-darwin-amd64 build/whatsapp-notifier-windows-amd64.exe; do
+            if [ ! -s "$artifact" ]; then
+              echo "Artifact missing or empty: $artifact"
+              exit 1
+            fi
+            echo "OK: $artifact ($(stat -c%s "$artifact") bytes)"
+          done
+
       - name: Create Release
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.tag.outputs.version }}
           files: |
