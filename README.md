@@ -105,5 +105,3 @@ This triggers:
 
 - Add delivery status handling, persistence, and retries.
 - Add session management endpoints for headless deployments.
-
-Test
